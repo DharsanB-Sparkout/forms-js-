@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form validation</title>
+
+    <!-- css -->
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <section>
+         <form id="form">
+            <h1>Registration form</h1>
+
+            <div>
+               <label for="fname">Name</label>       
+               <input type="text" class="name" id="fname" placeholder="Enter your name" />
+               <p class="error"></p>
+            </div>
+
+            <div>
+              <label for="email">Email</label>
+              <input type='text'  class="email" id="email" placeholder="Enter your Email" />
+              <p class="error"></p>
+            </div>
+
+            <div>
+              <label for="phone-no">Phone-no</label>
+              <input type="tel" class="phone-no" id="phone" placeholder="Enter your phone number"/>
+              <p class="error"></p>
+            </div>
+
+            <div>
+              <label for="Feedback">Feedback</label>
+              <textarea name="textarea" id="feedback" ></textarea>
+              <p class="error"></p>
+            </div>
+
+            <input type="submit" type="submit" name="submit" value="Submit" class="button" />
+
+         </form>
+    </section>
+
+    <script>
+        const form = document.querySelector("#form");
+        const fname = document.querySelector("#fname");
+        const email = document.querySelector("#email");
+        const phone = document.querySelector("#phone");
+        const feedback = document.querySelector("#feedback");   
+
+        function checkError(element, message) {
+            const inputGroup = element.parentElement;
+            const errorElement = inputGroup.querySelector('.error');
+            errorElement.innerText = message;
+            // inputGroup.classList.add('error');
+            // inputGroup.classList.remove('check');
+        }    
+        function checkSuccess(element) {
+            const inputGroup = element.parentElement;
+            const errorElement = inputGroup.querySelector('.error');
+            errorElement.innerText = '';
+            // inputGroup.classList.add('check');
+            // inputGroup.classList.remove('error');
+        }
+
+        function validation() {
+
+            const fname_trimed = fname.value.trim();
+            let check = true;    
+                if (fname_trimed === '') {
+                    check = false;
+                    checkError(fname, "Enter your valid name");
+                } else {
+                    checkSuccess(fname);
+                }
+            
+            const email_trimmed = email.value.trim();    
+                if (email_trimmed === '') {
+                    check = false;
+                    checkError(email, "email id is required");
+                } else if (!validateEmail(email_trimmed)) {
+                    check = false;
+                    checkError(email, "Please enter a valid Email ID");
+                } else {
+                    checkSuccess(email);
+                }    
+
+            const phoneno_trimmed = phone.value.trim()    
+                if (phoneno_trimmed === '') {
+                    check = false;
+                    checkError(phone, "Phone number is required");
+                } else if (phoneno_trimmed.length !== 10) {
+                    check = false;
+                    checkError(phone, "Phone number should contain 10 digits");
+                }
+                else {
+                    checkSuccess(phone);
+                }    
+
+            const feedback_trimmed = feedback.value.trim()    
+                if (feedback_trimmed === '') {
+                    check = false;
+                    checkError(feedback, "Please give your Feedback");
+                } else {
+                    checkSuccess(feedback);
+                }    
+            return check;
+
+        }
+
+        form.addEventListener('submit', (e) => {
+            if (validation() == false) {
+                e.preventDefault();
+            }
+        });
+
+        
+        const validateEmail = (email) => {
+            return /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email);
+        }
+        const validatePhone = (phone) => {
+            return /^[0-9]*$/.test(phone);
+        }
+        phone.addEventListener('input', function (e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        })   
+        
+    </script>
+</body>
+</html>
